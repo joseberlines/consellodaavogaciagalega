@@ -21,7 +21,7 @@ El panel se ancla a la derecha de la ventana de Chrome, ocupa todo su alto, se m
 - Prompts compuestos: un prompt puede incluir otros por su nombre.
 - Lectura de **PDF, Word (.docx), Excel (.xlsx/.xls), LibreOffice (.ods/.odt), texto (.txt/.md/.csv) y correos (.eml)**.
 - Añadir prompts desde el propio panel y descargar la biblioteca en JSON o en texto.
-- Interfaz en español.
+- Interfaz en español, con tamaño de letra ajustable (botones **A−** / **A+**; por defecto un 20 % más grande que el tamaño base).
 
 ### Privacidad
 

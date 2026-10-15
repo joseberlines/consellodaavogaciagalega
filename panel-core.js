@@ -23,6 +23,9 @@ const promptListEl = document.getElementById("promptList");
 const docListEl = document.getElementById("docList");
 const fileMetaLine = document.getElementById("fileMetaLine");
 const openLibraryBtn = document.getElementById("openLibraryBtn");
+const fontDecBtn = document.getElementById("fontDecBtn");
+const fontIncBtn = document.getElementById("fontIncBtn");
+const fontResetBtn = document.getElementById("fontResetBtn");
 
 const promptsSectionHeader = document.getElementById("promptsSectionHeader");
 const promptsSectionBody = document.getElementById("promptsSectionBody");
@@ -70,6 +73,28 @@ let sectionsExpanded = { prompts: true, documents: true };
 
 const SECTIONS_KEY = "promptLauncher.sectionsExpanded";
 
+// Tamaño de letra: porcentaje entero (120 = 120 %), compartido por el panel y la pestaña.
+const UI_SCALE_KEY = "promptLauncher.uiScale";
+const UI_SCALE_DEFAULT = 120;
+const UI_SCALE_MIN = 80;
+const UI_SCALE_MAX = 200;
+const UI_SCALE_STEP = 10;
+let uiScalePct = UI_SCALE_DEFAULT;
+
+function applyUiScale() {
+  document.documentElement.style.setProperty("--ui-scale", String(uiScalePct / 100));
+  fontResetBtn.textContent = `${uiScalePct}%`;
+  fontResetBtn.title = `Restablecer al ${UI_SCALE_DEFAULT} %`;
+  fontDecBtn.disabled = uiScalePct <= UI_SCALE_MIN;
+  fontIncBtn.disabled = uiScalePct >= UI_SCALE_MAX;
+}
+
+async function setUiScale(pct) {
+  uiScalePct = Math.min(UI_SCALE_MAX, Math.max(UI_SCALE_MIN, pct));
+  applyUiScale();
+  await chrome.storage.local.set({ [UI_SCALE_KEY]: uiScalePct });
+}
+
 // ---------- Storage ----------
 async function loadAll() {
   const data = await chrome.storage.local.get([
@@ -78,12 +103,15 @@ async function loadAll() {
     METADATA_KEY,
     DOCS_STORAGE_KEY,
     SECTIONS_KEY,
+    UI_SCALE_KEY,
   ]);
   allPrompts = data[STORAGE_KEY] || [];
   expandedCategories = new Set(data[EXPANDED_KEY] || []);
   fileMetadata = data[METADATA_KEY] || null;
   allDocuments = data[DOCS_STORAGE_KEY] || [];
   sectionsExpanded = data[SECTIONS_KEY] || { prompts: true, documents: true };
+  uiScalePct = data[UI_SCALE_KEY] ?? UI_SCALE_DEFAULT;
+  applyUiScale();
 
   applySectionState();
   renderFileMeta();
@@ -608,6 +636,10 @@ if (openLibraryBtn) {
   }
 }
 
+fontDecBtn.addEventListener("click", () => setUiScale(uiScalePct - UI_SCALE_STEP));
+fontIncBtn.addEventListener("click", () => setUiScale(uiScalePct + UI_SCALE_STEP));
+fontResetBtn.addEventListener("click", () => setUiScale(UI_SCALE_DEFAULT));
+
 combineBtn.addEventListener("click", combineAndUse);
 combinedCopyBtn.addEventListener("click", () => {
   copyToClipboard(combinedPreviewText.value, combinedCopyFlag);
@@ -617,7 +649,7 @@ combinedCopyBtn.addEventListener("click", () => {
 chrome.storage.onChanged.addListener((changes, areaName) => {
   if (
     areaName === "local" &&
-    (changes[STORAGE_KEY] || changes[EXPANDED_KEY] || changes[METADATA_KEY] || changes[DOCS_STORAGE_KEY])
+    (changes[STORAGE_KEY] || changes[EXPANDED_KEY] || changes[METADATA_KEY] || changes[DOCS_STORAGE_KEY] || changes[UI_SCALE_KEY])
   ) {
     loadAll();
   }

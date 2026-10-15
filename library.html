@@ -9,8 +9,17 @@
 <body data-context="library">
   <div class="app">
     <header class="panel-header">
-      <h1>Consello da Abogacía Galega</h1>
-      <p class="subtitle">v0.3 &nbsp;·&nbsp; Autor: Jose Ferro</p>
+      <div class="header-top">
+        <div>
+          <h1>Consello da Abogacía Galega</h1>
+          <p class="subtitle">v0.3 &nbsp;·&nbsp; Autor: Jose Ferro</p>
+        </div>
+        <div class="font-controls" role="group" aria-label="Tamaño de letra">
+          <button id="fontDecBtn" class="btn-font" title="Reducir el tamaño de letra">A−</button>
+          <button id="fontResetBtn" class="btn-font" title="Restablecer al 120 %">120%</button>
+          <button id="fontIncBtn" class="btn-font" title="Aumentar el tamaño de letra">A+</button>
+        </div>
+      </div>
       <div id="fileMetaLine" class="file-meta-line" hidden></div>
 
       <div class="btn-row">
@@ -36,6 +45,7 @@
       <p><strong>Prompts (azul).</strong> Sube un archivo <code>prompts.json</code>, marca uno o varios prompts y combínalos.</p>
       <p><strong>Documentos (ámbar).</strong> Sube PDF, Word, Excel, ODS, ODT, texto plano o archivos .eml: su texto se extrae automáticamente. Marca uno o varios para incluirlos junto a tus prompts, o pulsa «Seleccionar todos» para marcarlos todos de una vez.</p>
       <p><strong>Combinar y copiar.</strong> Todo lo marcado — prompts y/o documentos — se une en un único bloque de texto, se copia al portapapeles y se inserta en el campo activo de la página que hay detrás de este panel.</p>
+      <p><strong>Tamaño de letra.</strong> Los botones <strong>A−</strong> y <strong>A+</strong> de la cabecera reducen o amplían toda la interfaz; pulsa el porcentaje para volver al 120 %. El tamaño elegido se recuerda entre sesiones.</p>
       <p><strong>Prompts compuestos.</strong> Un prompt puede "incluir" otros prompts por su nombre (se define al añadir un prompt): su texto se añade automáticamente allí donde se use ese prompt.</p>
       <p><strong>Limitaciones.</strong> Los PDF escaneados (imágenes sin capa de texto) no se pueden leer. Los archivos .msg de Outlook no se admiten: usa .eml o .txt. El soporte de .eml es básico (solo texto plano).</p>
 

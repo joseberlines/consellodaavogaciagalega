@@ -45,6 +45,9 @@ Requiere **Chrome 114 o superior** (API de Side Panel). Funciona igual en Window
 - El resultado — primero los prompts marcados (cada uno ya resuelto, incluyendo lo que incluya), luego los documentos marcados (cada uno con su nombre de archivo) — se copia al portapapeles, se muestra en una vista previa y (solo desde el panel lateral) se inserta en el campo de texto activo de la página que hay detrás.
 - La vista de biblioteca en pestaña completa muestra la misma vista previa y el botón de copiar, pero no intenta insertar en otra página.
 
+### Tamaño de letra
+- Los botones **A−** y **A+** de la cabecera reducen o amplían toda la interfaz (letra, botones, casillas y espacios) en pasos del 10 %, entre el 80 % y el 200 %. El valor por defecto es el **120 %**; pulsar el porcentaje lo restablece. Se recuerda entre sesiones y se comparte entre el panel lateral y la pestaña completa.
+
 ### Secciones desplegables
 - Las secciones Prompts y Documentos tienen cada una su cabecera para contraerlas o expandirlas, de forma independiente entre sí y del despliegue por categorías. El estado se conserva entre sesiones.
 
