@@ -1,0 +1,51 @@
+{
+  "prompts": [
+    {
+      "name": "Resumir artículo",
+      "date": "2026-08-01",
+      "author": "Alex",
+      "category": "Redacción",
+      "author_comments": "Úsalo con artículos largos cuando necesites las 3 ideas clave rápido, no un resumen completo.",
+      "text": "Resume el siguiente artículo en 3 puntos concisos, centrándote en las ideas clave."
+    },
+    {
+      "name": "Explícamelo como si tuviera 5 años",
+      "date": "2026-08-02",
+      "author": "Alex",
+      "category": "Explicación",
+      "text": "Explica el siguiente concepto como si tuviera cinco años, usando una analogía sencilla."
+    },
+    {
+      "name": "Revisión de código",
+      "date": "2026-08-03",
+      "author": "Sam",
+      "category": "Ingeniería",
+      "author_comments": "Prompt largo y exhaustivo: funciona mejor con un archivo completo o un diff, no con un fragmento.",
+      "text": "Revisa este código en cuanto a corrección, legibilidad, casos límite y rendimiento. Enumera los problemas por gravedad."
+    },
+    {
+      "name": "Tono corporativo",
+      "date": "2026-08-04",
+      "author": "Alex",
+      "category": "Redacción",
+      "author_comments": "Pieza reutilizable: inclúyela en otros prompts en lugar de repetir las pautas de tono cada vez.",
+      "text": "Escribe con un tono claro, profesional y cercano. Evita la jerga. Usa frases cortas."
+    },
+    {
+      "name": "Resumir artículo (con tono corporativo)",
+      "date": "2026-08-05",
+      "author": "Alex",
+      "category": "Redacción",
+      "author_comments": "Ejemplo de prompt compuesto: combina el resumidor con las pautas de tono corporativo.",
+      "includes": ["Tono corporativo"],
+      "text": "Resume el siguiente artículo en 3 puntos concisos, centrándote en las ideas clave."
+    }
+  ],
+  "metadata": {
+    "file_name": "sample-prompts.json",
+    "creation_date": "2026-08-05",
+    "created_by": "Jose Ferro",
+    "project": "Consello da Abogacía Galega — datos de ejemplo",
+    "total_prompts": 5
+  }
+}

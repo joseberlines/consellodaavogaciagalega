@@ -1,0 +1,11 @@
+Referencia del caso: 2026-0417
+
+Resumen de los hechos:
+La parte demandante alega incumplimiento de contrato relativo a un acuerdo de servicios firmado el 12-03-2026. La parte demandada lo niega, argumentando que los entregables pactados se facilitaron dentro del plazo contractual.
+
+Fechas clave:
+- Firma del contrato: 12-03-2026
+- Fecha de entrega discutida: 20-06-2026
+- Reclamación formal presentada: 02-07-2026
+
+Este es un documento de referencia de ejemplo para probar el panel "Documentos": súbelo junto con un prompt como "Resumir artículo" y comprueba cómo funciona "Combinar y copiar".

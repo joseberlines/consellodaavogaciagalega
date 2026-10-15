@@ -1,0 +1,43 @@
+{
+  "prompts": [
+    {
+      "nombre": "Resumir artículo",
+      "fecha": "2026-08-01",
+      "autor": "Alex",
+      "categoria": "Redacción",
+      "comentarios_del_autor": "Úsalo con artículos largos cuando necesites las 3 ideas clave rápido.",
+      "texto": "Resume el siguiente artículo en 3 puntos concisos, centrándote en las ideas clave."
+    },
+    {
+      "nombre": "Tono corporativo",
+      "fecha": "2026-08-04",
+      "autor": "Alex",
+      "categoria": "Redacción",
+      "comentarios_del_autor": "Pieza reutilizable: inclúyela en otros prompts.",
+      "texto": "Escribe con un tono claro, profesional y cercano. Evita la jerga. Usa frases cortas."
+    },
+    {
+      "nombre": "Resumir artículo (con tono corporativo)",
+      "fecha": "2026-08-05",
+      "autor": "Alex",
+      "categoria": "Redacción",
+      "comentarios_del_autor": "Ejemplo de prompt compuesto.",
+      "incluye": ["Tono corporativo"],
+      "texto": "Resume el siguiente artículo en 3 puntos concisos, centrándote en las ideas clave."
+    },
+    {
+      "nombre": "Análisis de caso",
+      "fecha": "2026-08-06",
+      "autor": "Jose Ferro",
+      "categoria": "Jurídico",
+      "texto": "Analiza el caso descrito en los documentos adjuntos: hechos relevantes, cuestiones jurídicas planteadas y posibles líneas de actuación."
+    }
+  ],
+  "metadata": {
+    "nombre_archivo": "sample-prompts-es.json",
+    "fecha_creacion": "2026-08-06",
+    "creado_por": "Jose Ferro",
+    "proyecto": "Consello da Abogacía Galega — ejemplo con claves en español",
+    "total_prompts": 4
+  }
+}

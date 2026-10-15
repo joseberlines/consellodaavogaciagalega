@@ -1,0 +1,33 @@
+html, body { margin: 0; }
+
+body { background: #f4f5f7; }
+
+.app {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: 24px 28px 40px;
+}
+
+.panel-header {
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 10px;
+  padding: 18px 20px 4px;
+  margin-bottom: 16px;
+}
+
+.panel-header h1 { font-size: 20px; }
+
+/* Theme colors: prompts = blue, documents = amber */
+.prompts-theme { border-color: #bcd6ee; }
+.prompts-theme .section-header { background: #eaf2fb; color: #1d4e81; }
+.prompts-theme .section-count { background: #fff; color: #2b6cb0; }
+
+.docs-theme { border-color: #eecf9b; }
+.docs-theme .section-header { background: #fbf1e0; color: #8a5a10; }
+.docs-theme .section-count { background: #fff; color: #b7791f; }
+
+.doc-row { border-color: #eecf9b; }
+.prompt-row { border-color: #cfe1f2; }
+
+.item-list { max-height: 380px; }

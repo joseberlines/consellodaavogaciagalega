@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Consello da Abogacía Galega</title>
+  <link rel="stylesheet" href="panel-layout.css" />
+  <link rel="stylesheet" href="sidepanel.css" />
+</head>
+<body data-context="sidepanel">
+  <div class="app">
+    <header class="panel-header">
+      <h1>Consello da Abogacía Galega</h1>
+      <p class="subtitle">v0.3 &nbsp;·&nbsp; Autor: Jose Ferro</p>
+      <div id="fileMetaLine" class="file-meta-line" hidden></div>
+
+      <div class="btn-row">
+        <button id="helpBtn" class="btn btn-outline">Ayuda</button>
+        <label class="btn btn-primary">
+          Subir JSON
+          <input type="file" id="fileInput" accept=".json,application/json" hidden />
+        </label>
+        <button id="clearBtn" class="btn btn-danger">Borrar</button>
+      </div>
+      <div class="btn-row">
+        <button id="addPromptBtn" class="btn btn-outline">+ Añadir prompt</button>
+        <button id="openLibraryBtn" class="btn btn-dark">⤢ Abrir en pestaña</button>
+      </div>
+      <div class="btn-row">
+        <button id="downloadJsonBtn" class="btn btn-outline">⬇ JSON</button>
+        <button id="downloadTxtBtn" class="btn btn-outline">⬇ Texto</button>
+      </div>
+    </header>
+
+    <div class="help-panel" id="helpPanel" hidden>
+      <p><strong>Qué es.</strong> Un panel persistente con la biblioteca compartida de prompts de IA y de documentos de referencia del Consello da Abogacía Galega, anclado junto a la página en la que estás trabajando.</p>
+      <p><strong>Prompts (azul).</strong> Sube un archivo <code>prompts.json</code>, marca uno o varios prompts y combínalos.</p>
+      <p><strong>Documentos (ámbar).</strong> Sube PDF, Word, Excel, ODS, ODT, texto plano o archivos .eml: su texto se extrae automáticamente. Marca uno o varios para incluirlos junto a tus prompts, o pulsa «Seleccionar todos» para marcarlos todos de una vez.</p>
+      <p><strong>Combinar y copiar.</strong> Todo lo marcado — prompts y/o documentos — se une en un único bloque de texto, se copia al portapapeles y se inserta en el campo activo de la página que hay detrás de este panel.</p>
+      <p><strong>Prompts compuestos.</strong> Un prompt puede "incluir" otros prompts por su nombre (se define al añadir un prompt): su texto se añade automáticamente allí donde se use ese prompt.</p>
+      <p><strong>Limitaciones.</strong> Los PDF escaneados (imágenes sin capa de texto) no se pueden leer. Los archivos .msg de Outlook no se admiten: usa .eml o .txt. El soporte de .eml es básico (solo texto plano).</p>
+
+      <details class="help-details">
+        <summary>Estructura del archivo JSON</summary>
+        <p>El archivo puede ser un objeto con la lista <code>prompts</code> (y, opcionalmente, un bloque <code>metadata</code>), o directamente una lista de prompts. <strong>Todas las claves se aceptan en español o en inglés</strong> (se indican como <code>español</code> / <code>inglés</code>).</p>
+
+        <p class="help-subtitle">Claves de cada prompt</p>
+        <ul class="key-list">
+          <li><code>texto</code> / <code>text</code> <span class="req">obligatoria</span> — el texto del prompt. Es la única clave imprescindible.</li>
+          <li><code>nombre</code> / <code>name</code> — nombre que se muestra en la lista. Si falta, se usa "Prompt N". Importante: es también la referencia que usan otros prompts para incluirlo.</li>
+          <li><code>autor</code> / <code>author</code> — autor del prompt. Alimenta el filtro por autor y su contador.</li>
+          <li><code>fecha</code> / <code>date</code> — fecha de creación del prompt (p. ej. <code>2026-08-01</code>).</li>
+          <li><code>categoria</code> / <code>category</code> — categoría. Si algún prompt la tiene, la lista se agrupa en carpetas desplegables.</li>
+          <li><code>comentarios_del_autor</code> / <code>author_comments</code> — nota del autor sobre para qué sirve el prompt (se muestra en cursiva bajo el nombre). No obligatoria.</li>
+          <li><code>incluye</code> / <code>includes</code> — lista de <em>nombres</em> de otros prompts cuyo texto se añade tras el de este (prompts compuestos). No obligatoria.</li>
+        </ul>
+
+        <p class="help-subtitle">Claves del bloque <code>metadata</code> (opcional)</p>
+        <ul class="key-list">
+          <li><code>nombre_archivo</code> / <code>file_name</code> — nombre del archivo (se muestra bajo el título).</li>
+          <li><code>fecha_creacion</code> / <code>creation_date</code> — fecha del archivo (se muestra bajo el título).</li>
+          <li><code>creado_por</code> / <code>created_by</code> — quién preparó el archivo.</li>
+          <li><code>proyecto</code> / <code>project</code> y <code>total_prompts</code> — se leen y se conservan al descargar, pero no se muestran.</li>
+        </ul>
+        <p class="field-hint">Si no hay <code>metadata</code>, se usan el nombre y la fecha de modificación del propio archivo.</p>
+
+        <p class="help-subtitle">Otros sinónimos aceptados</p>
+        <ul class="key-list">
+          <li>nombre: <code>prompt_name</code>, <code>title</code> · texto: <code>prompt_text</code>, <code>content</code></li>
+          <li>autor: <code>prompt_author</code> · fecha: <code>date_of_creation</code>, <code>created_at</code></li>
+          <li>categoría: <code>categoría</code>, <code>prompt_category</code> · comentarios: <code>comentarios</code>, <code>comments</code></li>
+          <li>incluye: <code>include</code>, <code>composed_of</code></li>
+        </ul>
+
+        <p class="help-subtitle">Ejemplo</p>
+<pre class="json-example">{
+  "prompts": [
+    {
+      "nombre": "Resumir artículo",
+      "fecha": "2026-08-01",
+      "autor": "Alex",
+      "categoria": "Redacción",
+      "comentarios_del_autor": "Para sacar 3 ideas clave.",
+      "incluye": ["Tono corporativo"],
+      "texto": "Resume el siguiente artículo en 3 puntos."
+    }
+  ],
+  "metadata": {
+    "nombre_archivo": "prompts.json",
+    "fecha_creacion": "2026-08-05",
+    "creado_por": "Jose Ferro",
+    "proyecto": "Consello da Abogacía Galega",
+    "total_prompts": 1
+  }
+}</pre>
+      </details>
+
+      <button id="closeHelpBtn" class="btn btn-outline">Cerrar</button>
+    </div>
+
+    <div class="add-prompt-panel" id="addPromptPanel" hidden>
+      <div class="form-row">
+        <label>Nombre</label>
+        <input type="text" id="newName" placeholder="p. ej. Resumen de reunión" />
+      </div>
+      <div class="form-row form-row-split">
+        <div>
+          <label>Autor</label>
+          <input type="text" id="newAuthor" placeholder="Tu nombre" />
+        </div>
+        <div>
+          <label>Fecha</label>
+          <input type="date" id="newDate" />
+        </div>
+      </div>
+      <div class="form-row">
+        <label>Categoría</label>
+        <input type="text" id="newCategory" placeholder="p. ej. Productividad" />
+      </div>
+      <div class="form-row">
+        <label>Comentarios del autor <span class="optional-tag">(opcional)</span></label>
+        <input type="text" id="newComments" placeholder="Nota breve sobre para qué sirve este prompt" />
+      </div>
+      <div class="form-row">
+        <label>Incluir otros prompts <span class="optional-tag">(opcional)</span></label>
+        <select id="newIncludes" multiple size="4"></select>
+        <p class="field-hint">Ctrl/Cmd+clic para seleccionar varios. Su texto se añade después del texto propio de este prompt.</p>
+      </div>
+      <div class="form-row">
+        <label>Texto del prompt *</label>
+        <textarea id="newText" placeholder="El texto completo del prompt…"></textarea>
+      </div>
+      <div class="form-actions">
+        <button id="saveNewPromptBtn" class="btn btn-primary">Guardar prompt</button>
+        <button id="cancelNewPromptBtn" class="btn btn-outline">Cancelar</button>
+      </div>
+      <div id="addPromptError" class="form-error" hidden></div>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <main class="panel-main">
+      <!-- ---------- Prompts section (blue) ---------- -->
+      <section class="collapsible-section prompts-theme">
+        <button class="section-header" id="promptsSectionHeader">
+          <span class="section-chevron expanded" id="promptsSectionChevron">▾</span>
+          <span class="section-title">📚 Prompts</span>
+          <span class="section-count" id="promptsCountBadge">0</span>
+        </button>
+        <div class="section-body" id="promptsSectionBody">
+          <div class="filter-row">
+            <select id="authorFilter" title="Filtrar por autor"></select>
+            <input type="text" id="searchBox" placeholder="Filtrar prompts…" />
+          </div>
+          <div id="promptList" class="item-list"></div>
+        </div>
+      </section>
+
+      <!-- ---------- Documents section (amber) ---------- -->
+      <section class="collapsible-section docs-theme">
+        <button class="section-header" id="docsSectionHeader">
+          <span class="section-chevron expanded" id="docsSectionChevron">▾</span>
+          <span class="section-title">📄 Documentos</span>
+          <span class="section-count" id="docsCountBadge">0</span>
+        </button>
+        <div class="section-body" id="docsSectionBody">
+          <div class="btn-row">
+            <label class="btn btn-doc-upload">
+              Subir documentos
+              <input type="file" id="docFileInput" accept=".pdf,.docx,.doc,.xlsx,.xls,.ods,.odt,.txt,.md,.csv,.eml,.msg" multiple hidden />
+            </label>
+            <button id="selectAllDocsBtn" class="btn btn-doc-outline" disabled>Seleccionar todos</button>
+            <button id="clearDocsBtn" class="btn btn-danger">Borrar</button>
+          </div>
+          <div id="docList" class="item-list"></div>
+        </div>
+      </section>
+
+      <!-- ---------- Combine bar ---------- -->
+      <div class="combine-bar" id="combineBar">
+        <span id="combineSummary" class="combine-summary">Selecciona prompts y/o documentos para combinarlos.</span>
+        <button id="combineBtn" class="btn btn-primary btn-full" disabled>Combinar y copiar</button>
+      </div>
+
+      <section class="combined-preview" id="combinedPreviewBox" hidden>
+        <label class="preview-text-label">Texto combinado</label>
+        <textarea id="combinedPreviewText" readonly></textarea>
+        <div class="preview-actions">
+          <button id="combinedCopyBtn" class="btn btn-outline">Copiar de nuevo</button>
+          <span id="combinedCopyFlag" class="copied-flag" hidden>Copiado ✓</span>
+          <span id="insertHint" class="insert-hint" hidden>También insertado en el campo activo de tu página.</span>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="libs/pdf.min.js"></script>
+  <script src="libs/mammoth.browser.min.js"></script>
+  <script src="libs/xlsx.full.min.js"></script>
+  <script src="libs/jszip.min.js"></script>
+  <script src="shared.js"></script>
+  <script src="documents.js"></script>
+  <script src="panel-core.js"></script>
+</body>
+</html>
