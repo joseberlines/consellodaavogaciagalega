@@ -1,77 +1,66 @@
-# Consello da Abogacía Galega (extensión de Chrome)
+# Consello da Abogacía Galega
 
-v0.3 · Autor: Jose Ferro
+**Extensión de Chrome** (v0.3) con un panel lateral que reúne, en un solo sitio, una biblioteca compartida de **prompts** de IA y tus **documentos** de referencia. Autor: Jose Ferro.
 
-Extensión de Chrome con **Panel lateral** que combina dos colecciones — una biblioteca compartida de **prompts** de IA y un conjunto de trabajo de **documentos** de referencia — para que puedas seleccionar la combinación que necesites, unirla en un único bloque de texto y tenerla copiada en el portapapeles e insertada en la página en la que trabajas.
+## ¿Para qué sirve?
 
-El panel lateral se ancla a la derecha de la ventana, ocupa todo el alto, permanece abierto al cambiar de pestaña y se puede redimensionar arrastrando su borde izquierdo (es una capacidad nativa de Chrome).
+Quien trabaja a diario con herramientas de IA suele repetir las mismas instrucciones y pegar los mismos documentos una y otra vez. Esta extensión lo resuelve:
 
-## Instalación (sin empaquetar, para uso personal o de desarrollo)
+- **Biblioteca de prompts.** Cargas un archivo JSON con los prompts del equipo y los tienes siempre a mano, organizados por categorías y filtrables por autor o texto.
+- **Documentos de referencia.** Subes PDF, Word, Excel, LibreOffice, texto o correos `.eml` y la extensión extrae su texto automáticamente.
+- **Combinar y copiar.** Marcas uno o varios prompts y uno o varios documentos, pulsas **Combinar y copiar** y obtienes un único bloque de texto. Se copia al portapapeles y se inserta en el campo de texto de la página en la que estás trabajando.
 
-1. Descomprime esta carpeta en un lugar permanente (no la borres después: Chrome carga la extensión desde estos archivos).
-2. Abre `chrome://extensions` en Chrome.
-3. Activa el **Modo desarrollador** (interruptor arriba a la derecha).
-4. Pulsa **Cargar descomprimida** y selecciona esta carpeta.
-5. Pulsa el icono de la extensión en la barra de herramientas: se abre el **panel lateral**. (Si no se abre directamente, usa el icono de panel lateral de Chrome o el menú del puzle y elige "Consello da Abogacía Galega".)
+Ejemplo: marcas el prompt "Análisis de caso", marcas tres documentos del expediente, y con un clic tienes el prompt y los tres documentos juntos, listos para enviar a la herramienta de IA.
 
-Requiere **Chrome 114 o superior** (API de Side Panel). Funciona igual en Windows y en Mac.
+El panel se ancla a la derecha de la ventana de Chrome, ocupa todo su alto, se mantiene abierto mientras navegas y se puede ensanchar arrastrando su borde izquierdo.
 
-## Las dos colecciones
+### Principales funciones
 
-### 📚 Prompts (azul)
-- Pulsa **Subir JSON** para cargar un archivo `prompts.json` (formato abajo; hay ejemplos en `sample-prompts.json` con claves en inglés y `sample-prompts-es.json` con claves en español).
-- Los prompts se conservan entre sesiones. Subir un archivo nuevo sustituye el conjunto actual; **Borrar** lo vacía.
-- Cada prompt tiene una **casilla**: marca uno o varios para incluirlos en una combinación.
-- Si algún prompt tiene `category`, la lista se convierte en un explorador desplegable por categorías; si no, es una lista plana.
-- Un cuadro de búsqueda y un filtro por autor (con el número de prompts de cada uno) acotan la lista.
-- **+ Añadir prompt** abre un formulario para añadir un prompt directamente, pudiendo elegir otros prompts existentes para **incluir** (prompts compuestos).
-- **⬇ JSON** / **⬇ Texto** exportan todo lo cargado, en formato máquina o legible respectivamente.
+- Panel lateral persistente, con opción de abrir la biblioteca completa en una pestaña.
+- Casillas de selección en prompts y documentos, y botón **Seleccionar todos** para los documentos.
+- Prompts compuestos: un prompt puede incluir otros por su nombre.
+- Lectura de **PDF, Word (.docx), Excel (.xlsx/.xls), LibreOffice (.ods/.odt), texto (.txt/.md/.csv) y correos (.eml)**.
+- Añadir prompts desde el propio panel y descargar la biblioteca en JSON o en texto.
+- Interfaz en español.
 
-### 📄 Documentos (ámbar)
-- Pulsa **Subir documentos** para elegir uno o varios archivos de tu equipo. Formatos admitidos:
-  - **PDF** (`.pdf`) — solo PDF con texto; los PDF escaneados (solo imagen) no tienen texto extraíble (no hay OCR).
-  - **Word** (`.docx`) — el formato antiguo `.doc` no se admite; guárdalo antes como `.docx`.
-  - **Excel** (`.xlsx`, `.xls`) y **LibreOffice Calc** (`.ods`) — cada hoja se convierte en una tabla Markdown (máximo 200 filas por hoja, con aviso si se recorta).
-  - **LibreOffice Writer** (`.odt`) — extracción de párrafos y títulos lo mejor posible.
-  - **Texto plano** (`.txt`, `.md`, `.csv`).
-  - **Correo** (`.eml`) — solo correos de texto plano; no decodifica cuerpos multipart/base64/quoted-printable. El formato binario `.msg` de Outlook no se admite: expórtalo como `.eml` o `.txt`.
-- Cada documento tiene su **casilla**. El botón **Seleccionar todos** (junto a "Subir documentos") marca todos los documentos de una vez; si ya están todos marcados, cambia a **Deseleccionar todos** y los desmarca. **Borrar** elimina todos; la ✕ de una fila elimina solo ese documento.
-- Los documentos **no** forman parte del archivo compartido de prompts: son tu conjunto de trabajo local, guardado aparte en el navegador.
+### Privacidad
 
-### Combinar y copiar
-- Marca cualquier mezcla de prompts y/o documentos y pulsa **Combinar y copiar**.
-- El resultado — primero los prompts marcados (cada uno ya resuelto, incluyendo lo que incluya), luego los documentos marcados (cada uno con su nombre de archivo) — se copia al portapapeles, se muestra en una vista previa y (solo desde el panel lateral) se inserta en el campo de texto activo de la página que hay detrás.
-- La vista de biblioteca en pestaña completa muestra la misma vista previa y el botón de copiar, pero no intenta insertar en otra página.
+Todo se procesa **dentro de tu navegador**. Ni los prompts ni los documentos se envían a ningún servidor; se guardan solo en el almacenamiento local de Chrome.
 
-### Secciones desplegables
-- Las secciones Prompts y Documentos tienen cada una su cabecera para contraerlas o expandirlas, de forma independiente entre sí y del despliegue por categorías. El estado se conserva entre sesiones.
+## Requisitos
 
-### Abrir en pestaña
-- **⤢ Abrir en pestaña** abre todo — prompts *y* documentos — en una pestaña propia a tamaño completo (`library.html`), con exactamente los mismos datos que el panel lateral.
+- **Google Chrome 114 o superior** (en Windows o en Mac).
+- No funciona en Safari, Firefox ni Edge.
 
-## Estructura del archivo JSON
+## Instalación
 
-Puede ser un objeto con la lista `prompts` (y, opcionalmente, un bloque `metadata`) o, directamente, una lista de prompts. Esta misma descripción está también en **Ayuda → Estructura del archivo JSON**.
+La extensión no está en la Chrome Web Store, así que se instala manualmente en modo desarrollador. Lleva un par de minutos.
 
-**Todas las claves se aceptan en español o en inglés.**
+1. **Descarga el código.** En esta página de GitHub, pulsa el botón verde **Code** y elige **Download ZIP**.
+2. **Descomprime el archivo** y mueve la carpeta a un lugar permanente (por ejemplo, Documentos).
+   > ⚠️ No borres ni cambies de sitio la carpeta después de instalar: Chrome carga la extensión desde ella.
+3. **Abre la página de extensiones** de Chrome: escribe `chrome://extensions` en la barra de direcciones y pulsa Intro.
+4. **Activa el "Modo desarrollador"**, con el interruptor de arriba a la derecha.
+5. Pulsa **Cargar descomprimida** y selecciona la carpeta descomprimida, la que contiene el archivo `manifest.json`.
+6. Verás una tarjeta llamada **"Consello da Abogacía Galega"**. Para tenerla a mano, pulsa el icono del puzle 🧩 de la barra de Chrome y la chincheta 📌 junto al nombre de la extensión.
 
-**Claves de cada prompt**
+Para abrir el panel, pulsa el icono de la extensión (la balanza) en la barra de herramientas.
 
-| Español | Inglés | ¿Obligatoria? | Descripción |
-|---|---|---|---|
-| `texto` | `text` | **Sí** | Texto del prompt. Es la única clave imprescindible. |
-| `nombre` | `name` | No | Nombre mostrado en la lista (si falta, "Prompt N"). También es la referencia que usan otros prompts para incluirlo. |
-| `autor` | `author` | No | Autor. Alimenta el filtro por autor y su contador. |
-| `fecha` | `date` | No | Fecha de creación del prompt (p. ej. `2026-08-01`). |
-| `categoria` | `category` | No | Categoría; si alguno la tiene, la lista se agrupa en carpetas. |
-| `comentarios_del_autor` | `author_comments` | No | Nota del autor sobre para qué sirve el prompt (en cursiva bajo el nombre). |
-| `incluye` | `includes` | No | Lista de **nombres** de otros prompts cuyo texto se añade tras el de este. |
+### Actualizar a una versión nueva
 
-**Claves del bloque `metadata` (opcional)**: `nombre_archivo` / `file_name` y `fecha_creacion` / `creation_date` (se muestran bajo el título), `creado_por` / `created_by`, `proyecto` / `project` y `total_prompts` (se leen y conservan al descargar, sin mostrarse). Si no hay `metadata`, se usan el nombre y la fecha de modificación del propio archivo.
+Descarga de nuevo el ZIP, sustituye los archivos de la carpeta y, en `chrome://extensions`, pulsa el icono de recargar ⟳ en la tarjeta de la extensión. Si usas Git, basta con `git pull` y recargar.
 
-**Otros sinónimos aceptados**: nombre: `prompt_name`, `title` · texto: `prompt_text`, `content` · autor: `prompt_author` · fecha: `date_of_creation`, `created_at` · categoría: `categoría`, `prompt_category` · comentarios: `comentarios`, `comments` · incluye: `include`, `composed_of`.
+## Primeros pasos
 
-Se pueden mezclar claves en español y en inglés dentro del mismo archivo. Al **descargar** (⬇ JSON), el archivo se genera con las claves en inglés, que son las internas de la extensión; al volver a subirlo se leen igual.
+1. Pulsa el icono de la extensión para abrir el panel y **Ayuda** para ver un resumen y la estructura del JSON.
+2. En **📚 Prompts**, pulsa **Subir JSON** y elige un archivo de prompts. Para probar, usa `sample-prompts-es.json` (claves en español) o `sample-prompts.json` (claves en inglés), incluidos en esta carpeta.
+3. En **📄 Documentos**, pulsa **Subir documentos** y elige uno o varios archivos. Para probar, usa `sample-document.txt`.
+4. Marca con las casillas los prompts y documentos que quieras y pulsa **Combinar y copiar**.
+5. Si tenías un cuadro de texto activo en la página (por ejemplo, el chat de una herramienta de IA), el texto se escribe ahí automáticamente. Si no, ya está en el portapapeles: pégalo con Ctrl+V (Windows) o Cmd+V (Mac).
+
+## Formato del archivo de prompts
+
+Es un JSON con una lista `prompts`. Solo es obligatoria la clave `texto` (o `text`); las claves se aceptan en español o en inglés.
 
 ```json
 {
@@ -85,42 +74,21 @@ Se pueden mezclar claves en español y en inglés dentro del mismo archivo. Al *
       "incluye": ["Tono corporativo"],
       "texto": "Resume el siguiente artículo en 3 puntos."
     }
-  ],
-  "metadata": {
-    "nombre_archivo": "prompts.json",
-    "fecha_creacion": "2026-08-05",
-    "creado_por": "Jose Ferro",
-    "proyecto": "Consello da Abogacía Galega",
-    "total_prompts": 1
-  }
+  ]
 }
 ```
 
-## Prompts compuestos
+La descripción completa de todas las claves está en [DOCUMENTACION.md](DOCUMENTACION.md) y dentro de la extensión, en **Ayuda → Estructura del archivo JSON**.
 
-Un prompt puede **incluir** otros por su nombre (clave `includes` o selector del formulario Añadir prompt). El texto de los incluidos se añade automáticamente allí donde se use ese prompt: en la combinación, la exportación de texto, la copia y la inserción. Es recursivo y está protegido contra referencias circulares. Se indica con una insignia 🔗. Las referencias son por nombre: si renombras un prompt que otros incluyen, esas referencias se omiten con un aviso (no dan error).
+## Limitaciones conocidas
 
-## Cómo se procesan los documentos (y sus límites)
+- Los **PDF escaneados** (solo imagen, sin texto) no se pueden leer: no hay OCR.
+- No se admiten los archivos **.doc** antiguos (guárdalos como `.docx`) ni los **.msg** de Outlook (expórtalos como `.eml` o texto).
+- La lectura de `.eml` es básica: solo correos de texto plano.
+- La inserción automática no funciona en páginas internas de Chrome (`chrome://…`) ni en la Chrome Web Store; el texto se copia igualmente al portapapeles.
 
-Todos los formatos se procesan **dentro del navegador**: ningún archivo se sube ni se envía por la red. Se usan librerías JavaScript pequeñas y consolidadas, incluidas dentro de la extensión (carpeta `libs/`) en lugar de cargarse desde internet, como exige Manifest V3.
+## Más información
 
-Límites:
-- **PDF escaneados** (sin capa de texto real): no se extrae nada; haría falta OCR, que no está incluido.
-- **`.doc` antiguo**: no se admite, solo `.docx`.
-- **`.eml` básico**: los correos de texto plano funcionan bien; los multipart/HTML/base64 mostrarán contenido codificado.
-- **`.msg` de Outlook**: no se admite; expórtalo como `.eml` o texto.
-- **Hojas de cálculo**: se muestran valores, no fórmulas.
-- Las hojas grandes se limitan a 200 filas por hoja para evitar un prompt combinado inmanejable.
-
-## Notas y limitaciones
-
-- Requiere Chrome 114 o posterior.
-- La inserción automática no funciona en páginas internas de Chrome (`chrome://...`) ni en la Chrome Web Store; el portapapeles sí funciona, así que pega manualmente (Cmd/Ctrl+V).
-- Todos los datos — prompts, documentos y su texto extraído — permanecen en tu navegador; no se envía nada a ningún sitio.
-
-## Posibles mejoras futuras
-
-- Editar/borrar prompts individuales desde el panel.
-- OCR para PDF escaneados.
-- Análisis MIME completo de `.eml` (cuerpos multipart/HTML, adjuntos).
-- Reordenar los elementos marcados antes de combinar (ahora: primero todos los prompts, luego todos los documentos, en el orden de la lista).
+- [DOCUMENTACION.md](DOCUMENTACION.md): referencia completa de funciones, formato JSON y límites.
+- [install-guide.md](install-guide.md): guía de instalación paso a paso para personas sin experiencia técnica.
+- [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md): licencias de las librerías incluidas en `libs/`.
