@@ -5,3 +5,5 @@ chrome.runtime.onInstalled.addListener(() => {
     console.error("Failed to set side panel behavior:", err);
   });
 });
+
+importScripts('cendoj-background.js');

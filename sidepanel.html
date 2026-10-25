@@ -5,6 +5,7 @@
   <title>Consello da Abogacía Galega</title>
   <link rel="stylesheet" href="panel-layout.css" />
   <link rel="stylesheet" href="sidepanel.css" />
+  <link rel="stylesheet" href="cendoj.css" />
 </head>
 <body data-context="sidepanel">
   <div class="app">
@@ -12,7 +13,7 @@
       <div class="header-top">
         <div>
           <h1>Consello da Abogacía Galega</h1>
-          <p class="subtitle">v0.3 &nbsp;·&nbsp; Autor: Jose Ferro</p>
+          <p class="subtitle">v0.4 &nbsp;·&nbsp; Autor: Jose Ferro</p>
         </div>
         <div class="font-controls" role="group" aria-label="Tamaño de letra">
           <button id="fontDecBtn" class="btn-font" title="Reducir el tamaño de letra">A−</button>
@@ -185,6 +186,21 @@
         </div>
       </section>
 
+      <section class="collapsible-section cendoj-theme">
+        <button class="section-header" id="cendojToggle" aria-expanded="true" aria-controls="cendojBody"><span class="section-title">⚖ CENDOJ</span><span id="cendojCount" class="section-count">0</span></button>
+        <div class="section-body" id="cendojBody">
+          <form id="cendojForm"><label for="cendojQuery">Consulta de jurisprudencia</label><textarea id="cendojQuery" rows="3" required placeholder="Palabras clave o sintaxis del CENDOJ"></textarea>
+          <label for="cendojLimit">Máximo de resultados</label><select id="cendojLimit"><option>10</option><option>25</option><option>50</option></select>
+          <label><input type="checkbox" id="cendojAutoExport"> Exportar CSV y JSON al terminar</label>
+          <div class="btn-row"><button class="btn btn-primary" type="submit" id="cendojStart">Buscar en CENDOJ</button><button class="btn btn-outline" type="button" id="cendojStop">Detener</button></div></form>
+          <div class="btn-row"><button class="btn btn-outline" id="cendojCapture">Capturar página visible</button><button class="btn btn-danger" id="cendojClear">Borrar resultados</button></div>
+          <p id="cendojStatus" role="status" aria-live="polite"></p>
+          <div class="btn-row"><button class="btn btn-outline" id="cendojCsv">⬇ CSV</button><button class="btn btn-outline" id="cendojJson">⬇ JSON</button></div>
+          <p class="field-hint">Se guardan metadatos y enlaces localmente, sin PDFs ni servicios de IA. Revisa los avisos de CENDOJ y respeta sus condiciones de uso. Si la búsqueda se detiene, puedes navegar y capturar manualmente.</p>
+          <div id="cendojResults" class="item-list"></div>
+        </div>
+      </section>
+
       <!-- ---------- Combine bar ---------- -->
       <div class="combine-bar" id="combineBar">
         <span id="combineSummary" class="combine-summary">Selecciona prompts y/o documentos para combinarlos.</span>
@@ -210,5 +226,6 @@
   <script src="shared.js"></script>
   <script src="documents.js"></script>
   <script src="panel-core.js"></script>
+  <script src="cendoj-panel.js"></script>
 </body>
 </html>
