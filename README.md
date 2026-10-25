@@ -2,6 +2,12 @@
 
 **Extensión de Chrome** (v0.3) con un panel lateral que reúne, en un solo sitio, una biblioteca compartida de **prompts** de IA y tus **documentos** de referencia. Autor: Jose Ferro.
 
+## Captura de pantalla
+
+Panel lateral con la biblioteca de prompts, los documentos de referencia y la búsqueda de jurisprudencia CENDOJ.
+
+![Panel lateral del Consello da Abogacía Galega: Prompts, Documentos y CENDOJ](docs/images/herramienta.jpg)
+
 ## ¿Para qué sirve?
 
 Quien trabaja a diario con herramientas de IA suele repetir las mismas instrucciones y pegar los mismos documentos una y otra vez. Esta extensión lo resuelve:
