@@ -1,33 +1,37 @@
-html, body { margin: 0; }
-
-body { background: #f4f5f7; }
-
-.app {
-  max-width: calc(820px * var(--ui-scale));
-  margin: 0 auto;
-  padding: calc(24px * var(--ui-scale)) calc(28px * var(--ui-scale)) calc(40px * var(--ui-scale));
-}
-
-.panel-header {
-  background: #fff;
-  border: 1px solid #e2e2e2;
-  border-radius: calc(10px * var(--ui-scale));
-  padding: calc(18px * var(--ui-scale)) calc(20px * var(--ui-scale)) calc(4px * var(--ui-scale));
-  margin-bottom: calc(16px * var(--ui-scale));
-}
-
-.panel-header h1 { font-size: calc(20px * var(--ui-scale)); }
-
-/* Theme colors: prompts = blue, documents = amber */
-.prompts-theme { border-color: #bcd6ee; }
-.prompts-theme .section-header { background: #eaf2fb; color: #1d4e81; }
-.prompts-theme .section-count { background: #fff; color: #2b6cb0; }
-
-.docs-theme { border-color: #eecf9b; }
-.docs-theme .section-header { background: #fbf1e0; color: #8a5a10; }
-.docs-theme .section-count { background: #fff; color: #b7791f; }
-
-.doc-row { border-color: #eecf9b; }
-.prompt-row { border-color: #cfe1f2; }
-
-.item-list { max-height: calc(380px * var(--ui-scale)); }
+:root { font-family: system-ui, sans-serif; color: #17352b; background: #f3f6f4; --reader-size: 20px; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+[hidden] { display: none !important; }
+button, input { font: inherit; }
+button, .attach-button { cursor: pointer; }
+button, .attach-button, .reader-actions a { border: 1px solid #c5d8ce; border-radius: 7px; background: #fff; color: #14532d; padding: 8px 12px; text-decoration: none; }
+button:hover, .attach-button:hover { background: #e9f3ec; }
+:focus-visible { outline: 3px solid #29844b; outline-offset: 3px; }
+.library-header { height: 92px; padding: 16px 32px; background: #14532d; color: white; display: flex; justify-content: space-between; align-items: center; }
+h1 { font-size: 24px; margin: 0; }
+.library-header p { margin: 4px 0 0; font-size: 14px; opacity: .85; }
+.reader-tools { display: flex; gap: 8px; }
+.library-layout { display: grid; grid-template-columns: 320px minmax(0, 1fr); height: calc(100dvh - 92px); }
+aside { background: #fff; border-right: 1px solid #d8e2dc; padding: 24px 16px; overflow-y: auto; }
+aside > label { display: block; font-size: 14px; font-weight: 600; margin-bottom: 8px; }
+#librarySearch { width: 100%; border: 1px solid #b4c8bc; border-radius: 7px; padding: 10px; }
+.collection h2 { font-size: 14px; margin: 26px 6px 10px; display: flex; justify-content: space-between; }
+.collection ul { padding: 0; margin: 0; list-style: none; }
+.item-button { display: block; width: 100%; text-align: left; margin: 4px 0; border-color: transparent; padding: 12px; overflow-wrap: anywhere; }
+.item-button[aria-current="true"] { background: #e7f2ea; border-color: #8bb89a; font-weight: 600; }
+.item-button small { display: block; font-size: 12px; font-weight: normal; color: #596d61; margin-top: 5px; }
+.sidebar-hint, .collection .empty { color: #65776c; font-size: 13px; line-height: 1.5; padding: 0 6px; }
+.sidebar-hint { margin-top: 30px; }
+main { overflow-y: auto; padding: 40px clamp(24px, 5vw, 90px) 80px; }
+article, #readerEmpty { max-width: 1000px; margin: 0 auto; }
+article { background: #fff; padding: clamp(24px, 4vw, 56px); border: 1px solid #e0e7e2; border-radius: 12px; }
+#readerEmpty { padding-top: 12vh; color: #50675a; }
+#readerTitle { font-size: 30px; line-height: 1.3; margin: 8px 0 16px; overflow-wrap: anywhere; }
+.eyebrow { text-transform: uppercase; letter-spacing: .1em; font-size: 12px; font-weight: 700; color: #39734d; }
+.metadata { color: #63756a; white-space: pre-wrap; line-height: 1.6; }
+.reader-actions { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 24px 0; font-size: 14px; }
+#readerNotice { color: #776021; line-height: 1.6; }
+.reading-text { font-size: var(--reader-size); line-height: 1.85; white-space: pre-wrap; overflow-wrap: anywhere; color: #263d30; }
+#libraryStatus { max-width: 1000px; margin: 20px auto; }
+@media (max-width: 760px) { .library-header { padding: 16px; } .library-layout { grid-template-columns: 230px minmax(0, 1fr); } main { padding: 20px 16px; } article { padding: 20px; } #readerTitle { font-size: 24px; } }
+@media (max-width: 520px) { .library-layout { display: block; height: auto; } aside { max-height: 40vh; border-bottom: 1px solid #d8e2dc; } main { overflow: visible; } }

@@ -7,3 +7,15 @@ chrome.runtime.onInstalled.addListener(() => {
 });
 
 importScripts('cendoj-background.js');
+
+importScripts('shared.js');
+let defaultPromptsTask = Promise.resolve();
+chrome.runtime.onMessage.addListener((message, sender, respond) => {
+  if (message.type !== 'library:seedDefaults' || sender.id !== chrome.runtime.id || !sender.url?.startsWith(chrome.runtime.getURL(''))) return;
+  defaultPromptsTask = defaultPromptsTask.then(installDefaultCasePrompts);
+  defaultPromptsTask.then(() => respond({ ok: true }), error => {
+    respond({ ok: false, error: error.message });
+    defaultPromptsTask = Promise.resolve();
+  });
+  return true;
+});
