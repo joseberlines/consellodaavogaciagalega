@@ -4,9 +4,9 @@
 
 ## Captura de pantalla
 
-Panel lateral con la biblioteca de prompts, los documentos de referencia y la búsqueda de jurisprudencia CENDOJ.
+Panel lateral de la versión 0.6.0 con expedientes, copias de seguridad, prompts, documentos y jurisprudencia CENDOJ.
 
-![Panel lateral del Consello da Abogacía Galega: Prompts, Documentos y CENDOJ](docs/images/herramienta.jpg)
+![Panel lateral v0.6.0: expedientes, copia y restauración, prompts, documentos y CENDOJ](docs/images/herramienta.jpg)
 
 ## ¿Para qué sirve?
 
