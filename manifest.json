@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Consello da Abogacía Galega",
-  "version": "0.4.0",
-  "description": "Panel lateral persistente con una biblioteca compartida de prompts de IA y documentos de referencia: selecciona lo que necesites, combínalo y se copia e inserta en la página en la que trabajas.",
+  "version": "0.5.0",
+  "description": "Biblioteca de prompts comunes, documentos y jurisprudencia CENDOJ organizados por expediente, con panel lateral y lector en pestaña.",
   "action": {
     "default_title": "Consello da Abogacía Galega — abrir panel lateral",
     "default_icon": {

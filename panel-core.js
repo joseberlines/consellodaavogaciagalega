@@ -92,13 +92,13 @@ function applyUiScale() {
 async function setUiScale(pct) {
   uiScalePct = Math.min(UI_SCALE_MAX, Math.max(UI_SCALE_MIN, pct));
   applyUiScale();
-  await chrome.storage.local.set({ [UI_SCALE_KEY]: uiScalePct });
+  await CaseStorage.local.set({ [UI_SCALE_KEY]: uiScalePct });
 }
 
 // ---------- Storage ----------
 async function loadAll() {
   await ensureDefaultCasePrompts();
-  const data = await chrome.storage.local.get([
+  const data = await CaseStorage.local.get([
     STORAGE_KEY,
     EXPANDED_KEY,
     METADATA_KEY,
@@ -122,31 +122,31 @@ async function loadAll() {
 }
 
 async function savePrompts(prompts) {
-  await chrome.storage.local.set({ [STORAGE_KEY]: prompts });
+  await CaseStorage.local.set({ [STORAGE_KEY]: prompts });
   allPrompts = prompts;
   renderPrompts();
   renderCombineBar();
 }
 
 async function saveMetadata(metadata) {
-  await chrome.storage.local.set({ [METADATA_KEY]: metadata });
+  await CaseStorage.local.set({ [METADATA_KEY]: metadata });
   fileMetadata = metadata;
   renderFileMeta();
 }
 
 async function saveDocumentsState(docs) {
-  await chrome.storage.local.set({ [DOCS_STORAGE_KEY]: docs });
+  await CaseStorage.local.set({ [DOCS_STORAGE_KEY]: docs });
   allDocuments = docs;
   renderDocuments();
   renderCombineBar();
 }
 
 async function saveExpandedCategories() {
-  await chrome.storage.local.set({ [EXPANDED_KEY]: Array.from(expandedCategories) });
+  await CaseStorage.local.set({ [EXPANDED_KEY]: Array.from(expandedCategories) });
 }
 
 async function saveSectionsState() {
-  await chrome.storage.local.set({ [SECTIONS_KEY]: sectionsExpanded });
+  await CaseStorage.local.set({ [SECTIONS_KEY]: sectionsExpanded });
 }
 
 function applySectionState() {
@@ -488,27 +488,24 @@ clearBtn.addEventListener("click", async () => {
 docFileInput.addEventListener("change", async (e) => {
   const files = e.target.files;
   if (!files || files.length === 0) return;
-
-  setStatus(`Procesando ${files.length} documento(s)…`);
-  const { added, errors } = await processUploadedFiles(files);
-
-  if (added.length) {
-    const existingNames = new Set(allDocuments.map((d) => d.name));
-    const deduped = added.filter((d) => !existingNames.has(d.name));
-    await saveDocumentsState([...allDocuments, ...deduped]);
+  try {
+    const uploadCaseId = await CaseStorage.activeId();
+    setStatus(`Procesando ${files.length} documento(s)…`);
+    const { added, errors } = await processUploadedFiles(files);
+    if (added.length) {
+      await CaseStorage.addDocuments(uploadCaseId, added);
+      await loadAll();
+    }
+    if (errors.length) {
+      setStatus(`Se procesaron ${added.length} documento(s). Fallaron ${errors.length}: ${errors.map(item => `${item.name} (${item.message})`).join("; ")}`, added.length === 0);
+    } else {
+      setStatus(`Se procesaron ${added.length} documento(s) en el expediente de origen.`);
+    }
+  } catch (error) {
+    setStatus(`No se pudieron guardar los documentos: ${error.message}`, true);
+  } finally {
+    docFileInput.value = "";
   }
-
-  if (errors.length) {
-    setStatus(
-      `Se añadieron ${added.length} documento(s). Fallaron ${errors.length}: ${errors
-        .map((e2) => `${e2.name} (${e2.message})`)
-        .join("; ")}`,
-      errors.length > 0 && added.length === 0
-    );
-  } else {
-    setStatus(`Se añadieron ${added.length} documento(s).`);
-  }
-  docFileInput.value = "";
 });
 
 selectAllDocsBtn.addEventListener("click", () => {
@@ -647,7 +644,12 @@ combinedCopyBtn.addEventListener("click", () => {
 });
 
 // Keep in sync across the side panel and any open library tab.
-chrome.storage.onChanged.addListener((changes, areaName) => {
+CaseStorage.onChanged.addListener((changes, areaName) => {
+  if (changes.caseChanged) {
+    checkedDocNames.clear();
+    combinedPreviewText.value = "";
+    combinedPreviewBox.hidden = true;
+  }
   if (
     areaName === "local" &&
     (changes[STORAGE_KEY] || changes[EXPANDED_KEY] || changes[METADATA_KEY] || changes[DOCS_STORAGE_KEY] || changes[UI_SCALE_KEY])

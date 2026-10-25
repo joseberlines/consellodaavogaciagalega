@@ -59,19 +59,20 @@
   $('librarySearch').addEventListener('input', renderList);
   $('readerCopy').onclick = async () => { try { await navigator.clipboard.writeText(current()?.text || ''); $('libraryStatus').textContent = 'Texto copiado.'; } catch { $('libraryStatus').textContent = 'No se pudo copiar el texto.'; } };
   $('readerAttach').onchange = async event => {
+    const attachCaseId = await CaseStorage.activeId();
     const entry = current(), file = event.target.files[0]; if (!entry || entry.type !== 'cendoj' || !file) return;
     $('libraryStatus').textContent = 'Extrayendo texto…';
     try {
       const text = await extractDocumentText(file); if (!text.trim()) throw Error('No se encontró texto. Si el PDF está escaneado, necesita reconocimiento de texto.');
-      const saved = await chrome.storage.local.get('cendoj.texts');
+      const saved = await CaseStorage.local.get('cendoj.texts', attachCaseId);
       const texts = { ...(saved['cendoj.texts'] || {}), [entry.sourceId]: { text, name: file.name } };
-      await chrome.storage.local.set({ 'cendoj.texts': texts }); data['cendoj.texts'] = texts; rebuild();
+      await CaseStorage.local.set({ 'cendoj.texts': texts }, attachCaseId); if (await CaseStorage.activeId() === attachCaseId) { data['cendoj.texts'] = texts; rebuild(); }
       $('libraryStatus').textContent = 'Texto íntegro guardado localmente.';
     } catch (error) { $('libraryStatus').textContent = error.message; }
     event.target.value = '';
   };
-  async function resize(delta) { readerSize = Math.min(32,Math.max(16,readerSize+delta)); document.documentElement.style.setProperty('--reader-size',readerSize+'px'); await chrome.storage.local.set({'library.readerSize':readerSize}); }
+  async function resize(delta) { readerSize = Math.min(32,Math.max(16,readerSize+delta)); document.documentElement.style.setProperty('--reader-size',readerSize+'px'); await CaseStorage.local.set({'library.readerSize':readerSize}); }
   $('readerSmaller').onclick = () => resize(-2); $('readerLarger').onclick = () => resize(2);
-  chrome.storage.onChanged.addListener((changes, area) => { if (area !== 'local') return; for (const key of keys) if (changes[key]) data[key] = changes[key].newValue; rebuild(); });
-  ensureDefaultCasePrompts().then(() => chrome.storage.local.get(keys)).then(saved => { data = saved; readerSize = Math.min(32,Math.max(16,Number(saved['library.readerSize']) || 20)); document.documentElement.style.setProperty('--reader-size',readerSize+'px'); rebuild(); }).catch(error => { $('libraryStatus').textContent = 'No se pudo cargar la biblioteca: '+error.message; });
+  CaseStorage.onChanged.addListener((changes, area) => { if (area !== 'local') return; if (changes.caseChanged) selected = null; for (const key of keys) if (changes[key]) data[key] = changes[key].newValue; rebuild(); });
+  ensureDefaultCasePrompts().then(() => CaseStorage.local.get(keys)).then(saved => { data = saved; readerSize = Math.min(32,Math.max(16,Number(saved['library.readerSize']) || 20)); document.documentElement.style.setProperty('--reader-size',readerSize+'px'); rebuild(); }).catch(error => { $('libraryStatus').textContent = 'No se pudo cargar la biblioteca: '+error.message; });
 })();

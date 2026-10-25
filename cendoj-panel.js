@@ -24,6 +24,6 @@
       $('cendojResults').append(card);
     }
   }
-  chrome.storage.local.get('cendoj.session').then(data => render(data['cendoj.session']));
-  chrome.storage.onChanged.addListener((changes, area) => { if (area === 'local' && changes['cendoj.session']) render(changes['cendoj.session'].newValue); });
+  CaseStorage.local.get('cendoj.session').then(data => render(data['cendoj.session']));
+  CaseStorage.onChanged.addListener((changes, area) => { if (area === 'local' && changes['cendoj.session']) render(changes['cendoj.session'].newValue); });
 })();

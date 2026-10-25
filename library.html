@@ -5,9 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Biblioteca — Consello da Abogacía Galega</title>
   <link rel="stylesheet" href="library.css">
+  <link rel="stylesheet" href="cases.css">
 </head>
 <body>
-  <header class="library-header"><div><h1>Biblioteca</h1><p>Consello da Abogacía Galega</p></div><div class="reader-tools" role="group" aria-label="Tamaño del texto"><button id="readerSmaller" aria-label="Reducir texto">A−</button><button id="readerLarger" aria-label="Ampliar texto">A+</button></div></header>
+  <header class="library-header"><div><h1>Biblioteca</h1><p>Consello da Abogacía Galega · v0.5.0</p></div><div class="reader-tools" role="group" aria-label="Tamaño del texto"><button id="readerSmaller" aria-label="Reducir texto">A−</button><button id="readerLarger" aria-label="Ampliar texto">A+</button></div></header>
+  <div class="library-cases"><div class="case-manager"><label for="caseSelect">Expediente activo</label><select id="caseSelect" aria-label="Expediente activo"></select><button id="caseCreate" type="button">+ Nuevo</button><button id="caseRename" type="button">Renombrar</button><button id="caseDelete" type="button">Eliminar</button><small>Documentos y CENDOJ por expediente · Prompts comunes a todos</small><p id="caseStatus" role="status" aria-live="polite"></p></div></div>
   <div class="library-layout">
     <aside aria-label="Navegar por la biblioteca">
       <label for="librarySearch">Buscar en la biblioteca</label>
@@ -27,6 +29,7 @@
     </main>
   </div>
   <script src="libs/pdf.min.js"></script><script src="libs/mammoth.browser.min.js"></script>
-  <script src="shared.js"></script><script src="documents.js"></script><script src="library.js"></script>
+  <script src="shared.js"></script>
+  <script src="cases.js"></script><script src="cases-ui.js"></script><script src="documents.js"></script><script src="library.js"></script>
 </body>
 </html>
