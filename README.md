@@ -92,3 +92,44 @@ La descripción completa de todas las claves está en [DOCUMENTACION.md](DOCUMEN
 - [DOCUMENTACION.md](DOCUMENTACION.md): referencia completa de funciones, formato JSON y límites.
 - [install-guide.md](install-guide.md): guía de instalación paso a paso para personas sin experiencia técnica.
 - [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md): licencias de las librerías incluidas en `libs/`.
+
+## CENDOJ (v0.4)
+
+La tercera sección, **CENDOJ**, está disponible tanto en el panel lateral como en
+la biblioteca en pestaña. Introduce una consulta, elige 10, 25 o 50 resultados y
+pulsa **Buscar en CENDOJ**. La extensión abre el buscador público, intenta rellenar
+el formulario y recorre los números consecutivos de su paginación. Revisa los
+avisos legales o validaciones de la web. No se eluden controles de acceso.
+
+**Detener** conserva los resultados. Si la búsqueda automática no funciona,
+realízala en la web, selecciona su pestaña y pulsa **Capturar página visible**.
+Puedes avanzar manualmente y repetir la captura; se eliminan duplicados por
+ECLI, ROJ o enlace. Una nueva búsqueda sustituye los resultados anteriores.
+
+Los botones **CSV** y **JSON** exportan los metadatos y enlaces a la carpeta
+`CENDOJ_Local` de Descargas. La casilla de exportación al terminar permite guardar
+ambos formatos automáticamente. El CSV lleva BOM UTF-8 y separador de punto y
+coma para Excel. No se descargan PDFs. La posición conserva el orden del buscador,
+sin clasificación jurídica por IA.
+
+Consulta y resultados se guardan en `chrome.storage.local`, compartidos entre las
+dos vistas, sin cuentas, servidores, Python ni APIs de terceros. **Borrar resultados**
+elimina estos datos. Los nuevos permisos `tabs` y `downloads` permiten controlar
+la pestaña CENDOJ y exportar archivos; los permisos de las funciones anteriores
+se conservan. El nuevo script de contenido solo se carga en
+`https://www.poderjudicial.es/search/*`.
+
+El proceso se detiene tras tres minutos o al reiniciarse el service worker y
+conserva los datos recogidos. El DOM del CENDOJ puede cambiar: los selectores están
+en `cendoj-content.js`. No se ha validado un recorrido contra la web real desde
+este entorno, cuya política de red no permite acceder a CENDOJ. Revisa las
+condiciones actuales de https://www.poderjudicial.es/search/indexAN.jsp antes de
+una recopilación sistemática o reutilización. No es una herramienta oficial.
+
+Para instalar: descomprime la extensión, abre `chrome://extensions`, activa el
+modo desarrollador y carga la carpeta que contiene `manifest.json`. Si ya estaba
+instalada, pulsa **Recargar** y vuelve a abrir el panel. No requiere compilación.
+
+Verificación local: `node --check cendoj-background.js`,
+`node --check cendoj-content.js`, `node --check cendoj-panel.js` y
+`node --test tests/*.test.cjs`.

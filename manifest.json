@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Consello da Abogacía Galega",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Panel lateral persistente con una biblioteca compartida de prompts de IA y documentos de referencia: selecciona lo que necesites, combínalo y se copia e inserta en la página en la que trabajas.",
   "action": {
     "default_title": "Consello da Abogacía Galega — abrir panel lateral",
@@ -29,9 +29,22 @@
     "activeTab",
     "scripting",
     "clipboardWrite",
-    "sidePanel"
+    "sidePanel",
+    "tabs",
+    "downloads"
   ],
   "host_permissions": [
     "<all_urls>"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.poderjudicial.es/search/*"
+      ],
+      "js": [
+        "cendoj-content.js"
+      ],
+      "run_at": "document_idle"
+    }
   ]
 }

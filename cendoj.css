@@ -1,0 +1,6 @@
+.cendoj-theme { border-color: #b8d8cb; }
+.cendoj-theme .section-header { background: #e9f5ef; color: #225c45; }
+#cendojForm { display: grid; gap: 8px; }
+#cendojQuery { width: 100%; box-sizing: border-box; resize: vertical; font: inherit; }
+#cendojResults article { padding: 10px; border: 1px solid #b8d8cb; border-radius: 6px; margin-top: 8px; overflow-wrap: anywhere; }
+#cendojResults p { margin: 6px 0; white-space: pre-wrap; }
