@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const vm = require('node:vm');
 const fs = require('node:fs');
 const listener = { addListener() {} };
-const context = vm.createContext({chrome:{storage:{local:{get:async()=>({})}},tabs:{onUpdated:listener},runtime:{onMessage:listener}},console,setTimeout,clearTimeout,URL});
+const context = vm.createContext({chrome:{storage:{local:{get:async()=>({})}},tabs:{onUpdated:listener},runtime:{onMessage:listener}},console,setTimeout,clearTimeout,URL,activeCaseId:async()=>'initial',readCaseValue:async()=>undefined,writeCaseValues:async()=>{}});
 vm.runInContext(fs.readFileSync(__dirname+'/../cendoj-background.js','utf8'),context);
 const run = code => vm.runInContext(code,context);
 test('deduplication checks all identifiers and enforces limit',()=>{

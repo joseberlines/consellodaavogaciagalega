@@ -1,8 +1,8 @@
 const CENDOJ_KEY = 'cendoj.session';
 const CENDOJ_FIELDS = ['posicion','id','titulo','fecha','organo','roj','ecli','n_resolucion','n_recurso','ponente','municipio','resumen','url_documento'];
 let cendojQueue = Promise.resolve();
-const cendojRead = async () => (await chrome.storage.local.get(CENDOJ_KEY))[CENDOJ_KEY] || { rows: [], running: false };
-const cendojSave = state => chrome.storage.local.set({ [CENDOJ_KEY]: state });
+const cendojRead = async () => { const caseId = await activeCaseId(); return { ...(await readCaseValue(CENDOJ_KEY, caseId) || { rows: [], running: false }), caseId }; };
+const cendojSave = async state => writeCaseValues(state.caseId || await activeCaseId(), { [CENDOJ_KEY]: state });
 const cendojValidUrl = url => { try { const u = new URL(url); return u.origin === 'https://www.poderjudicial.es' && u.pathname.startsWith('/search/'); } catch { return false; } };
 async function cendojDOM(tabId, action, extra = {}) {
   const tab = await chrome.tabs.get(tabId);
@@ -80,18 +80,18 @@ chrome.tabs.onUpdated.addListener((tabId, info) => {
 });
 chrome.runtime.onMessage.addListener((message, sender, respond) => {
   if (!message.type?.startsWith('cendoj:') || message.type === 'cendoj:dom') return;
-  if (sender.id !== chrome.runtime.id || sender.tab) return;
+  if (sender.id !== chrome.runtime.id || !sender.url?.startsWith(chrome.runtime.getURL(''))) return;
   cendojEnqueue(async () => {
     let state = await cendojRead();
     switch (message.type) {
       case 'cendoj:start': {
         if (!message.query || ![10,25,50].includes(message.limit)) throw Error('Introduce una consulta y un límite válido.');
         const tab = await chrome.tabs.create({ url: 'https://www.poderjudicial.es/search/indexAN.jsp' });
-        state = { query: message.query, limit: message.limit, autoExport: !!message.autoExport, rows: [], tabId: tab.id, running: true, pendingSearch: true, started: Date.now(), status: 'Abriendo CENDOJ. Revisa cualquier aviso legal en la página.' };
+        state = { caseId: state.caseId, query: message.query, limit: message.limit, autoExport: !!message.autoExport, rows: [], tabId: tab.id, running: true, pendingSearch: true, started: Date.now(), status: 'Abriendo CENDOJ. Revisa cualquier aviso legal en la página.' };
         await cendojSave(state); cendojSchedule(); break;
       }
       case 'cendoj:stop': clearTimeout(cendojTimer); await cendojFinish(state, 'Detenido. Se conservan los resultados recogidos.'); break;
-      case 'cendoj:clear': clearTimeout(cendojTimer); await cendojSave({ rows: [], running: false, status: 'Resultados borrados.' }); break;
+      case 'cendoj:clear': clearTimeout(cendojTimer); await cendojSave({ caseId: state.caseId, rows: [], running: false, status: 'Resultados borrados.' }); break;
       case 'cendoj:capture': {
         const tabs = await chrome.tabs.query({ active: true, currentWindow: true });
         const selected = tabs.find(tab => cendojValidUrl(tab.url));

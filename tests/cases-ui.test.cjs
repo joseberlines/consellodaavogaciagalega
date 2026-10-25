@@ -1,0 +1,22 @@
+const {test}=require('node:test');
+const assert=require('node:assert/strict');
+const vm=require('node:vm');
+const fs=require('node:fs');
+test('UI adapter reads only the active case and translates switches for every view',async()=>{
+ const manager={activeId:'A',cases:[{id:'A',name:'Caso A'},{id:'B',name:'Caso B'}]};
+ const saved={'caseManager.v1':manager,'case.A.promptLauncher.documents':[{name:'A'}],'case.B.promptLauncher.documents':[{name:'B'}],'promptLauncher.prompts':[{name:'Común'}]};
+ let listener;const updates=[];
+ const context=vm.createContext({console,document:{getElementById:()=>null},chrome:{runtime:{sendMessage:async()=>({ok:true,manager:structuredClone(manager)})},storage:{local:{get:async keys=>Object.fromEntries(keys.map(key=>[key,saved[key]])),set:async()=>{}},onChanged:{addListener:fn=>listener=fn}}}});
+ for(const file of ['cases.js','cases-ui.js'])vm.runInContext(fs.readFileSync(__dirname+'/../'+file,'utf8'),context);
+ await new Promise(resolve=>setImmediate(resolve));
+ const before=await vm.runInContext("CaseStorage.local.get(['promptLauncher.documents','promptLauncher.prompts'])",context);
+ assert.equal(before['promptLauncher.documents'][0].name,'A');assert.equal(before['promptLauncher.prompts'][0].name,'Común');
+ context.collect=changes=>updates.push(changes);vm.runInContext('CaseStorage.onChanged.addListener(collect)',context);
+ await listener({'case.B.promptLauncher.documents':{newValue:[{name:'B'}]}},'local');
+ assert.equal(updates.at(-1)['promptLauncher.documents'],undefined);
+ await listener({'caseManager.v1':{newValue:{...manager,activeId:'B'}}},'local');
+ assert.equal(updates.at(-1).caseChanged.newValue,'B');
+ assert.equal(updates.at(-1)['promptLauncher.documents'].newValue[0].name,'B');
+ const after=await vm.runInContext("CaseStorage.local.get('promptLauncher.documents')",context);
+ assert.equal(after['promptLauncher.documents'][0].name,'B');
+});

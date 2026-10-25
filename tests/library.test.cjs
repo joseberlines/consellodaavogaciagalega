@@ -17,6 +17,7 @@ function fixture(saved){
  const chrome={runtime:{sendMessage:async()=>({ok:true})},storage:{local:{get:async()=>saved,set:async values=>Object.assign(saved,values)},onChanged:{addListener:fn=>change=fn}}};
  const context=vm.createContext({console,URL,chrome,navigator:{clipboard:{writeText:async()=>{}}},document:{getElementById:id=>elements[id]||=(new Element()),createElement:()=>new Element(),documentElement:{style:{setProperty(){}}}}});
  vm.runInContext(source('shared.js'),context);vm.runInContext("const DOCS_STORAGE_KEY='promptLauncher.documents';",context);
+ vm.runInContext("const CaseStorage={local:chrome.storage.local,onChanged:chrome.storage.onChanged,activeId:async()=> 'initial'};",context);
  vm.runInContext(source('library.js'),context);
  return {elements,context,change:updates=>change(updates,'local')};
 }

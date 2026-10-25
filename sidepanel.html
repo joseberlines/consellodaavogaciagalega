@@ -6,6 +6,7 @@
   <link rel="stylesheet" href="panel-layout.css" />
   <link rel="stylesheet" href="sidepanel.css" />
   <link rel="stylesheet" href="cendoj.css" />
+  <link rel="stylesheet" href="cases.css">
 </head>
 <body data-context="sidepanel">
   <div class="app">
@@ -13,7 +14,7 @@
       <div class="header-top">
         <div>
           <h1>Consello da Abogacía Galega</h1>
-          <p class="subtitle">v0.4 &nbsp;·&nbsp; Autor: Jose Ferro</p>
+          <p class="subtitle">v0.6.0 &nbsp;·&nbsp; Autor: Jose Ferro</p>
         </div>
         <div class="font-controls" role="group" aria-label="Tamaño de letra">
           <button id="fontDecBtn" class="btn-font" title="Reducir el tamaño de letra">A−</button>
@@ -21,6 +22,7 @@
           <button id="fontIncBtn" class="btn-font" title="Aumentar el tamaño de letra">A+</button>
         </div>
       </div>
+      <div class="case-manager"><label for="caseSelect">Expediente activo</label><select id="caseSelect" aria-label="Expediente activo"></select><button id="caseCreate" type="button">+ Nuevo</button><button id="caseRename" type="button">Renombrar</button><button id="caseDelete" type="button">Eliminar</button><button id="caseBackup" type="button">Guardar copia</button><button id="caseRestore" type="button">Restaurar copia</button><input id="caseRestoreFile" type="file" accept=".json,application/json" hidden><div id="caseRestorePreview" hidden><p id="caseRestoreSummary"></p><button id="caseRestoreConfirm" type="button">Restaurar como nuevo expediente</button><button id="caseRestoreCancel" type="button">Cancelar</button></div><small>Documentos y CENDOJ por expediente · Prompts comunes a todos</small><p id="caseStatus" role="status" aria-live="polite"></p></div>
       <div id="fileMetaLine" class="file-meta-line" hidden></div>
 
       <div class="btn-row">
@@ -224,6 +226,7 @@
   <script src="libs/xlsx.full.min.js"></script>
   <script src="libs/jszip.min.js"></script>
   <script src="shared.js"></script>
+  <script src="cases.js"></script><script src="cases-backup.js"></script><script src="cases-ui.js"></script>
   <script src="documents.js"></script>
   <script src="panel-core.js"></script>
   <script src="cendoj-panel.js"></script>

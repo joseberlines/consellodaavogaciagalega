@@ -1,6 +1,6 @@
 # Consello da Abogacía Galega
 
-**Extensión de Chrome** (v0.3) con un panel lateral que reúne, en un solo sitio, una biblioteca compartida de **prompts** de IA y tus **documentos** de referencia. Autor: Jose Ferro.
+**Extensión de Chrome** (v0.6.0) con un panel lateral que reúne, en un solo sitio, una biblioteca compartida de **prompts** de IA y tus **documentos** de referencia. Autor: Jose Ferro.
 
 ## Captura de pantalla
 
@@ -148,15 +148,15 @@ Prompts, Documentos y CENDOJ y un lector central amplio. Al pulsar cada elemento
 se muestra su texto individual completo, sin recortarlo. Puedes buscar por nombre
 o contenido, copiar el texto y ampliar o reducir la letra. Los cambios del panel
 se reflejan en la biblioteca abierta. El icono mantiene la balanza dorada con
-fondo verde oscuro en sus cuatro tamaños.
+fondo rojo oscuro en sus cuatro tamaños.
 
 Los prompts compuestos incluyen el texto de sus referencias. Los documentos
 muestran el texto extraído al subirlos. CENDOJ muestra los metadatos y el resumen
 recogidos; estos datos no equivalen a la sentencia íntegra. En cada resolución
 puedes abrir el enlace original y **Adjuntar texto íntegro** desde un PDF con capa
 de texto, TXT, MD o DOCX para leerlo y conservarlo localmente. No hay descarga
-masiva de PDFs ni reconocimiento OCR. El texto adjunto se conserva bajo
-`cendoj.texts` al sustituir búsquedas; se elimina con los datos de la extensión.
+masiva de PDFs ni reconocimiento OCR. El texto adjunto se conserva en su expediente al sustituir búsquedas; se elimina
+al borrar ese expediente o los datos de la extensión.
 
 Se añaden una sola vez dos prompts en la categoría **Análisis del caso**:
 - **Estado del caso — informe para el abogado**: hechos, cronología, fase actual,
@@ -169,3 +169,52 @@ Para usarlos con todos los documentos: selecciona el prompt en el panel, pulsa
 incluye los documentos seleccionados; el prompt por sí solo no transmite archivos
 a una IA. Los prompts iniciales se añaden sin sustituir los existentes y no se
 reponen automáticamente si el usuario los borra.
+
+
+## Expedientes separados (v0.5.0)
+
+El selector **Expediente activo** aparece en el panel lateral y en la biblioteca.
+Permite crear, cambiar, renombrar y eliminar expedientes. Cada expediente guarda
+sus propios documentos, consulta y resultados CENDOJ y textos íntegros adjuntos.
+Los prompts —incluidos los dos prompts iniciales— son comunes a todos los asuntos.
+
+Al actualizar, los datos anteriores se trasladan automáticamente a **Expediente
+inicial**, sin modificar la biblioteca de prompts. El expediente activo se
+comparte entre todas las ventanas del mismo perfil de Chrome. Al cambiarlo se
+limpian las selecciones de documentos y la vista previa combinada; una búsqueda
+CENDOJ en curso se detiene conservando sus resultados en el expediente de origen.
+Las subidas iniciadas en un expediente siguen perteneciendo a ese expediente,
+aunque cambies mientras se extrae el texto.
+
+**Eliminar** solicita confirmación y borra los documentos, resultados y textos
+CENDOJ de ese expediente, conservando los prompts comunes. No se puede eliminar
+el último expediente. Los datos siguen siendo locales al perfil de Chrome, sin
+sincronización entre equipos. Conserva copias de los archivos originales.
+
+
+## Copias de seguridad y restauración (v0.6.0)
+
+Los botones **Guardar copia** y **Restaurar copia** aparecen junto al selector de
+expediente, tanto en el panel lateral como en la biblioteca.
+
+1. Selecciona el expediente y pulsa **Guardar copia** para descargar un archivo
+   JSON con su nombre, fecha de creación, documentos (texto extraído y metadatos),
+   consulta y resultados CENDOJ y textos íntegros adjuntos a las resoluciones.
+2. Para recuperarlo, pulsa **Restaurar copia**, elige el JSON y revisa el nombre y
+   los recuentos de documentos, resoluciones y textos adjuntos.
+3. Pulsa **Restaurar como nuevo expediente**. Se crea y selecciona un expediente
+   nuevo; nunca se sustituyen los existentes. Si el nombre ya existe, se añade
+   «(restaurado)» con un número cuando sea necesario. La búsqueda CENDOJ anterior
+   se detiene conservando sus resultados; ninguna búsqueda se reanuda desde la copia.
+
+La copia permite trasladar el expediente a otro equipo o perfil con esta versión
+instalada. Contiene el texto que guarda la extensión, **no los archivos PDF/Word
+originales ni los prompts comunes**. Puedes exportar los prompts por separado
+con el botón JSON de su biblioteca. El archivo no está cifrado y contiene los
+textos del expediente; guárdalo en una ubicación adecuada para esa información.
+
+Se admiten copias de formato `cag-case-backup`, versión 1, de hasta 8 MB. Se valida
+el contenido antes de restaurar. Una copia incorrecta o un error por falta de
+espacio no deben crear un expediente vacío ni reemplazar información existente.
+Si falta espacio, conserva la copia y libera almacenamiento o restaura en otro
+perfil; los datos existentes no se borran automáticamente.
