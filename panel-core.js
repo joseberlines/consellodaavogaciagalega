@@ -97,6 +97,7 @@ async function setUiScale(pct) {
 
 // ---------- Storage ----------
 async function loadAll() {
+  await ensureDefaultCasePrompts();
   const data = await chrome.storage.local.get([
     STORAGE_KEY,
     EXPANDED_KEY,

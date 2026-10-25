@@ -2,6 +2,12 @@
 
 **Extensión de Chrome** (v0.3) con un panel lateral que reúne, en un solo sitio, una biblioteca compartida de **prompts** de IA y tus **documentos** de referencia. Autor: Jose Ferro.
 
+## Captura de pantalla
+
+Panel lateral con la biblioteca de prompts, los documentos de referencia y la búsqueda de jurisprudencia CENDOJ.
+
+![Panel lateral del Consello da Abogacía Galega: Prompts, Documentos y CENDOJ](docs/images/herramienta.jpg)
+
 ## ¿Para qué sirve?
 
 Quien trabaja a diario con herramientas de IA suele repetir las mismas instrucciones y pegar los mismos documentos una y otra vez. Esta extensión lo resuelve:
@@ -133,3 +139,33 @@ instalada, pulsa **Recargar** y vuelve a abrir el panel. No requiere compilació
 Verificación local: `node --check cendoj-background.js`,
 `node --check cendoj-content.js`, `node --check cendoj-panel.js` y
 `node --test tests/*.test.cjs`.
+
+
+## Biblioteca de lectura y prompts iniciales
+
+**Abrir en pestaña** abre un navegador de contenido, con una lista lateral de
+Prompts, Documentos y CENDOJ y un lector central amplio. Al pulsar cada elemento
+se muestra su texto individual completo, sin recortarlo. Puedes buscar por nombre
+o contenido, copiar el texto y ampliar o reducir la letra. Los cambios del panel
+se reflejan en la biblioteca abierta. El icono mantiene la balanza dorada con
+fondo verde oscuro en sus cuatro tamaños.
+
+Los prompts compuestos incluyen el texto de sus referencias. Los documentos
+muestran el texto extraído al subirlos. CENDOJ muestra los metadatos y el resumen
+recogidos; estos datos no equivalen a la sentencia íntegra. En cada resolución
+puedes abrir el enlace original y **Adjuntar texto íntegro** desde un PDF con capa
+de texto, TXT, MD o DOCX para leerlo y conservarlo localmente. No hay descarga
+masiva de PDFs ni reconocimiento OCR. El texto adjunto se conserva bajo
+`cendoj.texts` al sustituir búsquedas; se elimina con los datos de la extensión.
+
+Se añaden una sola vez dos prompts en la categoría **Análisis del caso**:
+- **Estado del caso — informe para el abogado**: hechos, cronología, fase actual,
+  pruebas, plazos documentados, riesgos y cuestiones pendientes.
+- **Cómo proceder — estrategia y próximos pasos**: alternativas, recomendación
+  motivada, plan priorizado e información que falta.
+
+Para usarlos con todos los documentos: selecciona el prompt en el panel, pulsa
+**Seleccionar todos** en Documentos y **Combinar y copiar**. El texto resultante
+incluye los documentos seleccionados; el prompt por sí solo no transmite archivos
+a una IA. Los prompts iniciales se añaden sin sustituir los existentes y no se
+reponen automáticamente si el usuario los borra.
