@@ -6,7 +6,7 @@
 
 Panel lateral de la versión 0.6.0 con expedientes, copias de seguridad, prompts, documentos y jurisprudencia CENDOJ.
 
-![Panel lateral v0.6.0: expedientes, copia y restauración, prompts, documentos y CENDOJ](docs/images/herramienta.jpg)
+![Panel lateral v0.6.0: expedientes, copia y restauración, prompts, documentos y CENDOJ](docs/images/herramienta-v0.6.0.jpg)
 
 ## ¿Para qué sirve?
 
