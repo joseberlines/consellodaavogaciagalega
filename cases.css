@@ -10,3 +10,7 @@ body:has(.library-cases) { height: 100dvh; display: flex; flex-direction: column
 .library-header, .library-cases { flex-shrink: 0; }
 body:has(.library-cases) .library-layout { height: auto; flex: 1; min-height: 0; }
 @media (max-width: 520px) { body:has(.library-cases) .library-layout { overflow-y: auto; } }
+
+#caseRestorePreview { flex-basis: 100%; padding: 12px; background: #f0f6f2; border: 1px solid #b5c8bc; border-radius: 6px; }
+#caseRestorePreview[hidden] { display: none; }
+#caseRestoreSummary { margin: 0 0 10px; line-height: 1.5; }

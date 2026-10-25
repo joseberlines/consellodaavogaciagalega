@@ -1,6 +1,6 @@
 # Consello da Abogacía Galega
 
-**Extensión de Chrome** (v0.5.0) con un panel lateral que reúne, en un solo sitio, una biblioteca compartida de **prompts** de IA y tus **documentos** de referencia. Autor: Jose Ferro.
+**Extensión de Chrome** (v0.6.0) con un panel lateral que reúne, en un solo sitio, una biblioteca compartida de **prompts** de IA y tus **documentos** de referencia. Autor: Jose Ferro.
 
 ## Captura de pantalla
 
@@ -190,3 +190,31 @@ aunque cambies mientras se extrae el texto.
 CENDOJ de ese expediente, conservando los prompts comunes. No se puede eliminar
 el último expediente. Los datos siguen siendo locales al perfil de Chrome, sin
 sincronización entre equipos. Conserva copias de los archivos originales.
+
+
+## Copias de seguridad y restauración (v0.6.0)
+
+Los botones **Guardar copia** y **Restaurar copia** aparecen junto al selector de
+expediente, tanto en el panel lateral como en la biblioteca.
+
+1. Selecciona el expediente y pulsa **Guardar copia** para descargar un archivo
+   JSON con su nombre, fecha de creación, documentos (texto extraído y metadatos),
+   consulta y resultados CENDOJ y textos íntegros adjuntos a las resoluciones.
+2. Para recuperarlo, pulsa **Restaurar copia**, elige el JSON y revisa el nombre y
+   los recuentos de documentos, resoluciones y textos adjuntos.
+3. Pulsa **Restaurar como nuevo expediente**. Se crea y selecciona un expediente
+   nuevo; nunca se sustituyen los existentes. Si el nombre ya existe, se añade
+   «(restaurado)» con un número cuando sea necesario. La búsqueda CENDOJ anterior
+   se detiene conservando sus resultados; ninguna búsqueda se reanuda desde la copia.
+
+La copia permite trasladar el expediente a otro equipo o perfil con esta versión
+instalada. Contiene el texto que guarda la extensión, **no los archivos PDF/Word
+originales ni los prompts comunes**. Puedes exportar los prompts por separado
+con el botón JSON de su biblioteca. El archivo no está cifrado y contiene los
+textos del expediente; guárdalo en una ubicación adecuada para esa información.
+
+Se admiten copias de formato `cag-case-backup`, versión 1, de hasta 8 MB. Se valida
+el contenido antes de restaurar. Una copia incorrecta o un error por falta de
+espacio no deben crear un expediente vacío ni reemplazar información existente.
+Si falta espacio, conserva la copia y libera almacenamiento o restaura en otro
+perfil; los datos existentes no se borran automáticamente.

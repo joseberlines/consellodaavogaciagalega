@@ -8,6 +8,7 @@ chrome.runtime.onInstalled.addListener(() => {
 
 importScripts('cases.js');
 importScripts('cendoj-background.js');
+importScripts('cases-backup.js');
 importScripts('cases-background.js');
 
 importScripts('shared.js');

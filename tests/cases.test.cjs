@@ -6,9 +6,10 @@ const source=name=>fs.readFileSync(__dirname+'/../'+name,'utf8');
 function setup(initial={}) {
  const saved=structuredClone(initial), listeners=[];
  const local={get:async keys=>Object.fromEntries((Array.isArray(keys)?keys:[keys]).filter(key=>saved[key]!==undefined).map(key=>[key,structuredClone(saved[key])])),set:async values=>{for(const [key,value]of Object.entries(values))saved[key]=structuredClone(value);},remove:async keys=>{for(const key of keys)delete saved[key];}};
- const context=vm.createContext({console,crypto:require('node:crypto').webcrypto,chrome:{storage:{local},runtime:{id:'extension',getURL:path=>'chrome-extension://extension/'+path,onMessage:{addListener:fn=>listeners.push(fn)}}},clearTimeout(){},cendojTimer:null,cendojEnqueue:task=>task()});
+ const context=vm.createContext({console,TextEncoder,URL,crypto:require('node:crypto').webcrypto,chrome:{storage:{local},runtime:{id:'extension',getURL:path=>'chrome-extension://extension/'+path,getManifest:()=>({version:'0.6.0'}),onMessage:{addListener:fn=>listeners.push(fn)}}},clearTimeout(){},cendojTimer:null,cendojEnqueue:task=>task()});
  vm.runInContext(source('cases.js'),context);
  vm.runInContext("const cendojRead=async()=>{const caseId=await activeCaseId();return {...(await readCaseValue('cendoj.session',caseId)||{rows:[],running:false}),caseId}};const cendojSave=state=>writeCaseValues(state.caseId,{'cendoj.session':state});",context);
+ vm.runInContext(source('cases-backup.js'),context);
  vm.runInContext(source('cases-background.js'),context);
  const call=message=>new Promise(resolve=>listeners[0](message,{id:'extension',url:'chrome-extension://extension/sidepanel.html'},resolve));
  return {saved,run:code=>vm.runInContext(code,context),call};
@@ -49,4 +50,40 @@ test('uploads append without replacing earlier files or duplicating names',async
  await f.call({type:'cases:addDocuments',caseId:'initial',documents:[{name:'A',text:'duplicate'},{name:'B',text:'second'}]});
  assert.equal(f.saved['case.initial.promptLauncher.documents'].length,2);
  assert.equal(f.saved['case.initial.promptLauncher.documents'][0].text,'first');
+});
+test('backup restores into a new case with documents, judgment text and source metadata',async()=>{
+ const f=setup({'promptLauncher.documents':[{name:'case.txt',text:'Full document\nsecond line',ext:'txt',size:40}],'cendoj.session':{rows:[{roj:'STS 1',titulo:'Resolution',resumen:'summary',url_documento:'https://www.poderjudicial.es/search/AN/document'}],query:'query',limit:25,running:true,tabId:123,started:999},'cendoj.texts':{'STS 1':{text:'Full judgment',name:'judgment.pdf'}},'promptLauncher.prompts':[{name:'Shared'}]});
+ await f.call({type:'cases:init'});
+ const result=await f.call({type:'cases:backup',caseId:'initial'});assert.ok(result.ok);
+ const backup=JSON.parse(JSON.stringify(result.backup));
+ assert.equal(backup.version,1);assert.equal(backup.case.cendoj.rows[0].roj,'STS 1');
+ assert.equal(backup.case.cendoj.tabId,undefined);assert.equal(backup.case.cendoj.running,undefined);
+ const restored=await f.call({type:'cases:restore',backup});assert.ok(restored.ok);
+ const id=restored.manager.activeId;
+ assert.notEqual(id,'initial');assert.equal(restored.manager.cases.length,2);
+ assert.equal(restored.manager.cases[1].name,'Expediente inicial (restaurado)');
+ assert.deepEqual(f.saved['case.'+id+'.promptLauncher.documents'],backup.case.documents);
+ assert.equal(f.saved['case.'+id+'.cendoj.texts']['STS 1'].text,'Full judgment');
+ assert.equal(f.saved['case.'+id+'.cendoj.session'].running,false);
+ assert.equal(f.saved['case.'+id+'.cendoj.session'].tabId,undefined);
+ assert.equal(f.saved['case.initial.cendoj.session'].running,false);
+ assert.equal(f.saved['case.initial.promptLauncher.documents'][0].name,'case.txt');
+ assert.equal(f.saved['promptLauncher.prompts'][0].name,'Shared');
+ const second=await f.call({type:'cases:restore',backup});assert.ok(second.ok);
+ assert.equal(second.manager.cases[2].name,'Expediente inicial (restaurado 2)');
+});
+test('restore rejects malformed, unsupported, oversized and unsafe backups before writes',async()=>{
+ const f=setup();await f.call({type:'cases:init'});
+ const valid=(await f.call({type:'cases:backup',caseId:'initial'})).backup;
+ const before=structuredClone(f.saved);
+ const invalid=[{}, {...valid,version:99}, {...valid,case:{...valid.case,documents:[{name:'bad',text:42}]}}, {...valid,case:{...valid.case,cendoj:{...valid.case.cendoj,rows:[{url_documento:'javascript:alert(1)'}]}}}, {...valid,case:{...valid.case,documents:[{name:'big',text:'x'.repeat(8*1024*1024)}]}}];
+ for(const backup of invalid){const result=await f.call({type:'cases:restore',backup});assert.equal(result.ok,false);assert.deepEqual(f.saved,before);}
+});
+test('a storage failure during restore leaves no partial case or overwritten data',async()=>{
+ const f=setup();await f.call({type:'cases:init'});
+ const backup=(await f.call({type:'cases:backup',caseId:'initial'})).backup;
+ const before=structuredClone(f.saved);
+ f.run("chrome.storage.local.set=async()=>{throw Error('QUOTA_BYTES quota exceeded')}");
+ const result=await f.call({type:'cases:restore',backup});assert.equal(result.ok,false);
+ assert.match(result.error,/quota/);assert.deepEqual(f.saved,before);
 });

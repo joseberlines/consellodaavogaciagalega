@@ -58,6 +58,38 @@ const CaseStorage = (() => {
   document.getElementById('caseCreate')?.addEventListener('click',()=>{const name=prompt('Nombre del nuevo expediente');if(name?.trim())action('create',{name});});
   document.getElementById('caseRename')?.addEventListener('click',()=>{const current=manager?.cases.find(item=>item.id===manager.activeId);const name=prompt('Nuevo nombre del expediente',current?.name);if(name?.trim())action('rename',{caseId:current.id,name});});
   document.getElementById('caseDelete')?.addEventListener('click',()=>{const current=manager?.cases.find(item=>item.id===manager.activeId);if(current && confirm(`¿Eliminar «${current.name}» y todos sus documentos y datos CENDOJ? Esta acción no se puede deshacer. Los prompts comunes se conservan.`))action('delete',{caseId:current.id});});
+  let pendingBackup = null;
+  const backupStatus = message => { document.getElementById('caseStatus').textContent = message; };
+  document.getElementById('caseBackup')?.addEventListener('click',async()=>{
+    try {
+      await init(); const caseId=manager.activeId;
+      const {backup}=await request('backup',{caseId});
+      const name=backup.case.name.replace(/[<>:"/\\|?*\x00-\x1f]/g,'_');
+      triggerDownload(`expediente-${name}-${backup.exportedAt.slice(0,10)}.json`,JSON.stringify(backup,null,2),'application/json');
+      backupStatus('Copia preparada para descargar. Contiene el texto guardado; no los PDF o Word originales ni los prompts comunes.');
+    }catch(error){backupStatus('No se pudo crear la copia: '+error.message);}
+  });
+  document.getElementById('caseRestore')?.addEventListener('click',()=>document.getElementById('caseRestoreFile').click());
+  document.getElementById('caseRestoreFile')?.addEventListener('change',async event=>{
+    pendingBackup=null;document.getElementById('caseRestorePreview').hidden=true;
+    const file=event.target.files[0];if(!file)return;
+    try {
+      if(file.size>CASE_BACKUP_MAX_BYTES)throw Error('La copia supera el límite de 8 MB.');
+      const backup=JSON.parse(await file.text()), validated=validateCaseBackup(backup);
+      pendingBackup=backup;
+      document.getElementById('caseRestoreSummary').textContent=`${validated.name}: ${validated.documents.length} documentos, ${validated.session.rows.length} resoluciones y ${Object.keys(validated.texts).length} textos adjuntos. Se creará un nuevo expediente; los existentes y los prompts comunes se conservarán.`;
+      document.getElementById('caseRestorePreview').hidden=false;backupStatus('');
+    }catch(error){backupStatus('No se puede restaurar: '+error.message);}
+    finally{event.target.value='';}
+  });
+  document.getElementById('caseRestoreCancel')?.addEventListener('click',()=>{pendingBackup=null;document.getElementById('caseRestorePreview').hidden=true;});
+  document.getElementById('caseRestoreConfirm')?.addEventListener('click',async()=>{
+    if(!pendingBackup)return;
+    const button=document.getElementById('caseRestoreConfirm');button.disabled=true;
+    try{await request('restore',{backup:pendingBackup});pendingBackup=null;document.getElementById('caseRestorePreview').hidden=true;backupStatus('Copia restaurada en un nuevo expediente.');}
+    catch(error){backupStatus('No se pudo restaurar. Los expedientes existentes se conservan: '+error.message);}
+    finally{button.disabled=false;}
+  });
   init().catch(error=>{const el=document.getElementById('caseStatus');if(el)el.textContent=error.message;});
   return {addDocuments:(caseId,documents)=>request('addDocuments',{caseId,documents}),local:{get,set},onChanged:{addListener:fn=>listeners.push(fn)},activeId:async()=>{await init();return manager.activeId;}};
 })();

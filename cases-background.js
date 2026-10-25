@@ -4,6 +4,8 @@ chrome.runtime.onMessage.addListener((message, sender, respond) => {
     const manager = await initializeCases();
     const name = String(message.name || '').trim();
     if (['cases:create','cases:rename'].includes(message.type) && (!name || name.length > 120)) throw Error('Introduce un nombre de 1 a 120 caracteres.');
+    if (message.type === 'cases:backup') { respond({ok:true,backup:await buildCaseBackup(message.caseId)}); return; }
+    if (message.type === 'cases:restore') { respond({ok:true,manager:await restoreCaseBackup(message.backup)}); return; }
     if (message.type === 'cases:init') { respond({ok:true,manager}); return; }
     if (message.type === 'cases:write') { await writeCaseValues(message.caseId,message.values); respond({ok:true}); return; }
     if (message.type === 'cases:addDocuments') {

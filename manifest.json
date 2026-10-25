@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Consello da Abogacía Galega",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Biblioteca de prompts comunes, documentos y jurisprudencia CENDOJ organizados por expediente, con panel lateral y lector en pestaña.",
   "action": {
     "default_title": "Consello da Abogacía Galega — abrir panel lateral",
